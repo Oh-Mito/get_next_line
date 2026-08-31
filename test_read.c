@@ -1,8 +1,10 @@
 #include <unistd.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <stdio.h>
 
-# define BUF_SIZE 42
+# define BUF_SIZE 9
 
 int main(void)
 {
@@ -10,13 +12,13 @@ int main(void)
 	int	byte_num;
 	char	buf[BUF_SIZE];
 
-	fd = open("text.txt", 0_RDONLY);
+	fd = open("test.txt", O_RDONLY);
 	if (fd == -1)
 	{
 		write(1, "error", 5);
 		return (1);
 	}
-	byte_num = read(fd, *buf, 5);
+	byte_num = read(fd, &buf, BUF_SIZE);
 	if (byte_num == -1)
 	{
 		write (1, "read_error", 10);
