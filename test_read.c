@@ -44,10 +44,11 @@ int main(void)
 	}
 	while
 	{
-		byte_num += read(fd, &buf, 1);
+		byte_num = read(fd, &buf, 1);
 		if (byte_num == 0)
 			break ;
-		write(1, &buf[byte_num], 1);
+		idx += byte_num;
+		write(1, &buf[idx], 1);
 	}
 
 
