@@ -13,62 +13,47 @@
 #include "get_next_line.h"
 #include <unistd.h>
 
-char	*ft_strchr(const char *str, int c)
+int	strjoin(char *stash, char *buf)
 {
-	if (str == NULL)
-		return (NULL);
-	while (*str != '\0')
+	char *tmp;
+	int	stash_length;
+	int	buf_length;
+	int	total_length;
+
+	stash_length = 0;
+	buf_length = 0;
+	i = 0;
+	while (stash[stash_length] != '\0')
 	{
-		if (*str == (unsigned char)c)
-			return ((char *)str);
-		str++;
+		stash_length++;
+		tmp[stash_length] = stash[stash_length];
 	}
-	if ((unsigned char)c == '\0')
-		return ((char *)str);
-	return (NULL);
+	while (buf[buf_length] != '\0')
+		buf_length++;
+	total_length = stash_length + buf_length + 1;
+	stash = malloc(sizeof(char) * total_length);
+	if (!stash)
+	{
+		free(stash);
+		return (1);
+	}
+	while (buf_length--)
+	{
+		stash[total_length] = buf[buf_length];
+		total_length--;
+	}
+	while (stash_length--)
+	{
+		stash[total_length] = tmp[stash_length];
+		total_length--;
+	}
+	return (0);
 }
 
-int	read_until_newline(int fd, char **stash)
-{
-	char *buf;
-	ssize_t	read_buf;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (1);
-	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!buf)
-		return (1);
-	while (ft_strchr(*stash, '\n' == NULL))
-	{
-		read_buf = read(fd, buf, BUFFER_SIZE);
-		if (read_buf < 0)
-		{
-			free(buf);
-			free(*stash);
-			return (1); 
-		}
-	}
-}
-
-int	*ft_strcut(char **stash, char **sub_buf, char *buf, char c)
+int	store_stash(char *stash)
 {
 	int	count;
 
-	count = 0;
-	while (*(*buf) != c)
-		count++;
-	sub_buf = malloc(sizeof(char) * count + 1);
-	if (!sub_buf)
-	{
-		free(sub_buf);
-		return (1);
-	}
-	while (count--)
-	{
-		*(*sub_buf) = *(*buf);
-		*sub_buf++;
-		*buf++;
-	}
 	count = 0;
 	while (*(*buf) != '\0')
 		count++;
@@ -85,21 +70,56 @@ int	*ft_strcut(char **stash, char **sub_buf, char *buf, char c)
 		*stash++;
 		*buf++;
 	}
+	*stash = '\0';
 	return (0);
 }
 
+int	*ft_strcut(char *stash, char c, int count)
+{
+	char	*tmp;
+
+	sub_buf = malloc(sizeof(char) * count + 1);
+	tmp = sub_buf;
+	if (!sub_buf)
+	{
+		free(sub_buf);
+		return (1);
+	}
+	while (count--)
+	{
+		*(*sub_buf) = *stash;
+		*(sub_buf)++;
+		stash++;
+	}
+	*(sub_buf) = tmp;
+	return (0);
+}
+
+int	cheak_newline(char *stash, char c, int *count;)
+{
+	while (*stash != '\0')
+	{
+		if (*stash == c)
+			return (1);
+		stash++;
+		count++;
+	}
+	return (0);
+}
 char	*get_next_line(int fd)
 {
 	char	buf[BUFFER_SIZE + 1];
 	int		byte_num;
 	char	*sub_buf;
-	char	*stash;
+	int		count;
+	static char	*stash;
 
-	while(1)
+	count = 0;
+	while(cheak_newline(stash , '\n' &count) == 0)
 	{
 
 		byte_num = read(fd, buf, BUFFER_SIZE);
-		if (fd == 1)
+		if (bytenum == 0)
 			break ;
 		if (byte_num == -1)
 		{
@@ -108,10 +128,13 @@ char	*get_next_line(int fd)
 			return (1);
 		}
 		buf[byte_num] = '\0';
- 		if ((ft_strcut(stash, sub_buf, buf, '\n')) == 1)
-			return (1);
-
+		strjoin(stash, *buf);
 	}
+ 	if ((strcut(stash, '\n', count)) == 1)
+		return (1);
+	if (store_stash (stash) == 1)
+		return (1);
+	return (sub_buf);
 }
 
 int	main(void)
