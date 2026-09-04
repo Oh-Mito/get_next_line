@@ -6,142 +6,159 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 16:57:18 by omito             #+#    #+#             */
-/*   Updated: 2026/08/30 17:09:59 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/04 23:45:52 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <unistd.h>
 
-int	strjoin(char *stash, char *buf)
+int	store_stash_rest(char **stash, int count_until_newline)
+{
+	int	stash_length;
+	char *tmp;
+	int	i;
+
+	stash_length = 0;
+	i = 0;
+	while (*(*stash) != '\0')
+	{
+		stash_length++;
+		(*stash)++;
+	}	
+	tmp = malloc(sizeof(char) * stash_length - count_until_newline + 1);
+	if (!tmp)
+		return (1);
+	while (*tmp != '\0')
+	{
+		tmp[i] = (*stash)[count_until_newline];
+		i++;
+		count_until_newline++;
+	}
+	*tmp = '\0';
+	free(*stash);
+	(*stash) = tmp;
+	free(tmp);
+	return (0);
+}
+
+char	*strcut(char *stash, int count_until_newline)
+{
+	char	*tmp;
+	char	*sub_buf;
+
+	sub_buf = malloc(sizeof(char) * count_until_newline + 1);
+	tmp = sub_buf;
+	if (!sub_buf)
+	{
+		free(sub_buf);
+		return NULL;
+	}
+	while (count_until_newline--)
+	{
+		*sub_buf = *stash;
+		sub_buf++;
+		stash++;
+	}
+	sub_buf = tmp;
+	return (sub_buf);
+}
+
+int	strjoin(char **stash, char *buf)
 {
 	char *tmp;
 	int	stash_length;
 	int	buf_length;
 	int	total_length;
+	int	i;
 
 	stash_length = 0;
 	buf_length = 0;
-	i = 0;
-	while (stash[stash_length] != '\0')
-	{
+	while (*stash != NULL && (*stash)[stash_length] != '\0')
 		stash_length++;
-		tmp[stash_length] = stash[stash_length];
+	if (stash_length > 0)
+	{
+		tmp = malloc(sizeof(char) * stash_length);
+		if (!tmp)
+		{
+			free(tmp);
+			return (1);
+		}
+		while (i < stash_length)
+		{
+			tmp[i] = (*stash)[i];
+			i++;
+		}
 	}
 	while (buf[buf_length] != '\0')
 		buf_length++;
 	total_length = stash_length + buf_length + 1;
-	stash = malloc(sizeof(char) * total_length);
-	if (!stash)
+	*stash = malloc(sizeof(char) * total_length);
+	if (!(*stash))
 	{
-		free(stash);
+		free(*stash);
 		return (1);
 	}
-	while (buf_length--)
+	while (stash != NULL && buf_length--)
 	{
-		stash[total_length] = buf[buf_length];
+		(*stash)[total_length - 1] = buf[buf_length];
 		total_length--;
 	}
 	while (stash_length--)
 	{
-		stash[total_length] = tmp[stash_length];
+		(*stash)[total_length - 1] = tmp[stash_length];
 		total_length--;
 	}
+	free(tmp);
 	return (0);
 }
 
-int	store_stash(char *stash)
+int	cheak_newline(char *stash, char c, int *count_until_newline)
 {
-	int	count;
-
-	count = 0;
-	while (*(*buf) != '\0')
-		count++;
-	stash = malloc(sizeof(char) * count + 1);
-
-	if (!stash)
-	{
-		free(stash);
-		return (1);
-	}
-	while (*(*buf) != '\0')
-	{
-		*(*stash) = *(*buf);
-		*stash++;
-		*buf++;
-	}
-	*stash = '\0';
-	return (0);
-}
-
-int	*ft_strcut(char *stash, char c, int count)
-{
-	char	*tmp;
-
-	sub_buf = malloc(sizeof(char) * count + 1);
-	tmp = sub_buf;
-	if (!sub_buf)
-	{
-		free(sub_buf);
-		return (1);
-	}
-	while (count--)
-	{
-		*(*sub_buf) = *stash;
-		*(sub_buf)++;
-		stash++;
-	}
-	*(sub_buf) = tmp;
-	return (0);
-}
-
-int	cheak_newline(char *stash, char c, int *count;)
-{
-	while (*stash != '\0')
+	*count_until_newline = 0;
+	while (stash != NULL && *stash != '\0')
 	{
 		if (*stash == c)
 			return (1);
 		stash++;
-		count++;
+		(*count_until_newline)++;
 	}
 	return (0);
 }
+
 char	*get_next_line(int fd)
 {
 	char	buf[BUFFER_SIZE + 1];
 	int		byte_num;
 	char	*sub_buf;
-	int		count;
-	static char	*stash;
+	int		count_until_newline;
+	static char	*stash = NULL;
 
-	count = 0;
-	while(cheak_newline(stash , '\n' &count) == 0)
+	count_until_newline = 0;
+	while(cheak_newline(stash , '\n', &count_until_newline) == 0)
 	{
 
 		byte_num = read(fd, buf, BUFFER_SIZE);
-		if (bytenum == 0)
+		if (byte_num == 0)
 			break ;
 		if (byte_num == -1)
 		{
 			write (1,"read_error", 10);
-			close (fd);
-			return (1);
+			return NULL;
 		}
 		buf[byte_num] = '\0';
-		strjoin(stash, *buf);
+		if ((strjoin(&stash, buf)) == 1)
+			return NULL;
 	}
- 	if ((strcut(stash, '\n', count)) == 1)
-		return (1);
-	if (store_stash (stash) == 1)
-		return (1);
+ 	sub_buf = strcut(stash, count_until_newline);
+	if (store_stash_rest (&stash, count_until_newline) == 1)
+		return NULL;
 	return (sub_buf);
 }
 
 int	main(void)
 {
-	inf	fd;
-	char	buf[BUFFER_SIZE + 1];
-	int	byte_num;
+	int		fd;
 
 	fd = open("test.txt", O_RDONLY);
 	if (fd == -1)
@@ -149,7 +166,7 @@ int	main(void)
 		write(1, "error", 5);
 		return (1);
 	}
-	get_next_line(fd);
+	free(get_next_line(fd));
 	close(fd);
 }
 //get_next_line … 上の3段階を呼ぶだけの司令塔
