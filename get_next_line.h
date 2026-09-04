@@ -6,16 +6,16 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 17:50:27 by omito             #+#    #+#             */
-/*   Updated: 2026/08/30 17:54:55 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 01:30:01 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#define BUFFER_SIZE 42
+
+# include <fcntl.h>
+# include <stdlib.h>
+# define BUFFER_SIZE 42
 
 int		store_stash_rest(char **stash, int count_until_newline);
 char	*strcut(char *stash, int count_until_newline);
