@@ -6,11 +6,20 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 11:41:42 by omito             #+#    #+#             */
-/*   Updated: 2026/09/05 11:42:30 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 13:59:43 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*free_all(char **stash, char *buf, char *sub_buf)
+{
+	free(*stash);
+	free(buf);
+	free(sub_buf);
+	*stash = (NULL);
+	return (NULL);
+}
 
 int	store_stash_rest(char **stash, int count_until_newline)
 {
