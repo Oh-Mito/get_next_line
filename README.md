@@ -53,3 +53,39 @@ int	main(void)
 	close(fd);
 }
 ```
+
+
+``` c 
+#include <stdio.h>
+#include <fcntl.h>
+
+int	main(void)
+{
+	int		fd1;
+	int		fd2;
+
+	char	*sub_buf;
+
+	fd1 = open("test.txt", O_RDONLY);
+	fd2 = open("test2.txt", O_RDONLY); 
+	if (fd1 == -1 || fd2 == -1)
+	{
+		printf("open_error\n");
+		return (1);
+	}
+		sub_buf = get_next_line(fd1);
+		printf("%s", sub_buf);
+		free(sub_buf);
+		sub_buf = get_next_line(fd2);
+		printf("%s", sub_buf);
+		free(sub_buf);
+		sub_buf = get_next_line(fd1);
+		printf("%s", sub_buf);
+		free(sub_buf);
+		sub_buf = get_next_line(fd2);
+		printf("%s", sub_buf);
+		free(sub_buf);
+	close(fd1);
+	close(fd2);
+}
+```

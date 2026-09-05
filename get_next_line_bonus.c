@@ -6,13 +6,13 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 14:12:41 by omito             #+#    #+#             */
-/*   Updated: 2026/09/05 17:44:28 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 17:59:10 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char	*cut_and_store(char **stash, int count_until_newline, char *buf)
+static char	*cut_and_store(char **stash, int count_until_newline, char *buf)
 {
 	char	*sub_buf;
 
@@ -49,37 +49,4 @@ char	*get_next_line(int fd)
 	if (stash[fd] == NULL || stash[fd][0] == '\0')
 		return (free_all(&stash[fd], buf, NULL));
 	return (cut_and_store(&stash[fd], count_until_newline, buf));
-}
-
-#include <stdio.h>
-#include <fcntl.h>
-
-int	main(void)
-{
-	int		fd1;
-	int		fd2;
-
-	char	*sub_buf;
-
-	fd1 = open("test.txt", O_RDONLY);
-	fd2 = open("test2.txt", O_RDONLY); 
-	if (fd1 == -1 || fd2 == -1)
-	{
-		printf("open_error\n");
-		return (1);
-	}
-		sub_buf = get_next_line(fd1);
-		printf("%s", sub_buf);
-		free(sub_buf);
-		sub_buf = get_next_line(fd2);
-		printf("%s", sub_buf);
-		free(sub_buf);
-		sub_buf = get_next_line(fd1);
-		printf("%s", sub_buf);
-		free(sub_buf);
-		sub_buf = get_next_line(fd2);
-		printf("%s", sub_buf);
-		free(sub_buf);
-	close(fd1);
-	close(fd2);
 }
