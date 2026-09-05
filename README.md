@@ -1,5 +1,9 @@
 *This project has been created as part of the 42 curriculum by omito.*
 
+# get next line
+
+## Description
+
 
 //とりあえずBUFFER_SIZEでread
 //取ってきたbufの中で改行があるか探す

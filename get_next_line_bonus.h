@@ -6,7 +6,7 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 14:12:52 by omito             #+#    #+#             */
-/*   Updated: 2026/09/05 16:21:31 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 18:20:21 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*free_all(char **stash, char *buf, char *sub_buf);
 int		store_stash_rest(char **stash, int count_until_newline);
 char	*strcut(char *stash, int count_until_newline);
 int		strjoin(char **stash, char *buf);
-int		cheak_newline(char *stash, char c, int *count_until_newline);
+int		check_newline(char *stash, char c, int *count_until_newline);
 char	*get_next_line(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 11:41:42 by omito             #+#    #+#             */
-/*   Updated: 2026/09/05 13:59:43 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 18:19:32 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	strjoin(char **stash, char *buf)
 	return (0);
 }
 
-int	cheak_newline(char *stash, char c, int *count_until_newline)
+int	check_newline(char *stash, char c, int *count_until_newline)
 {
 	*count_until_newline = 0;
 	while (stash != NULL && *stash != '\0')

@@ -6,7 +6,7 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 14:12:41 by omito             #+#    #+#             */
-/*   Updated: 2026/09/05 17:59:10 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 18:20:42 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_next_line(int fd)
 	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (free_all(&stash[fd], buf, NULL));
-	while (cheak_newline(stash[fd], '\n', &count_until_newline) == 0)
+	while (check_newline(stash[fd], '\n', &count_until_newline) == 0)
 	{
 		byte_num = read(fd, buf, BUFFER_SIZE);
 		if (byte_num == 0)
