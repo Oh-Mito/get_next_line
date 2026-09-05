@@ -7,6 +7,9 @@
 //またreadを繰り返して、残り＋改行
 
 ```c
+
+//テキストファイルの中身を全て出力したい場合
+
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -28,5 +31,25 @@ int	main(void)
 	}
 	close(fd);
 }
+```
 
+```c 
+
+//get_next_lineを一回呼んで、指定した区切り文字まで出力したい場合。(mandatoryの場合１つ目の改行まで出力)
+int	main(void)
+{
+	int		fd;
+	char	*sub_buf;
+
+	fd = open("test.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		printf("open_error\n");
+		return (1);
+	}
+	sub_buf = get_next_line(fd);
+		printf("%s", sub_buf);
+		free(sub_buf);
+	close(fd);
+}
 ```
