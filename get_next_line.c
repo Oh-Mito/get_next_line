@@ -6,7 +6,7 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 16:57:18 by omito             #+#    #+#             */
-/*   Updated: 2026/09/05 01:44:15 by omito            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:33:13 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,14 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	strlen(char *stash)
-{
-	while (*stash != NULL && (*stash)[stash_length] != '\0')
-		stash_length++;
-	return (stash_length);
-
-}
 int	store_stash_rest(char **stash, int count_until_newline)
 {
 	int		stash_length;
 	char	*tmp;
 	int		i;
 
-	stash_length = 0;
 	i = 0;
+	stash_length = 0;
 	while (*stash != NULL && (*stash)[stash_length] != '\0')
 		stash_length++;
 	tmp = malloc(sizeof(char) * (stash_length - count_until_newline + 1));
@@ -69,34 +62,23 @@ char	*strcut(char *stash, int count_until_newline)
 int	strjoin(char **stash, char *buf)
 {
 	char	*tmp;
-	int		stash_length;
-	int		buf_length;
-	int		total_length;
+	int		s_len;
+	int		b_len;
 
-	stash_length = 0;
-	buf_length = 0;
-	while (*stash != NULL && (*stash)[stash_length] != '\0')
-		stash_length++;
-	while (buf[buf_length] != '\0')
-		buf_length++;
-	total_length = stash_length + buf_length + 1;
-	tmp = malloc(sizeof(char) * total_length);
+	s_len = 0;
+	b_len = 0;
+	while (*stash != NULL && (*stash)[s_len] != '\0')
+		s_len++;
+	while (buf[b_len] != '\0')
+		b_len++;
+	tmp = malloc(sizeof(char) * (s_len + b_len + 1));
 	if (!tmp)
 		return (1);
-	tmp[total_length - 1] = '\0';
-	total_length--;
-	while (buf_length > 0)
-	{
-		tmp[total_length - 1] = buf[buf_length - 1];
-		total_length--;
-		buf_length--;
-	}
-	while (stash_length > 0)
-	{
-		tmp[total_length - 1] = (*stash)[stash_length - 1];
-		total_length--;
-		stash_length--;
-	}
+	tmp[s_len + b_len] = '\0';
+	while (b_len-- > 0)
+		tmp[s_len + b_len] = buf[b_len];
+	while (s_len-- > 0)
+		tmp[s_len] = (*stash)[s_len];
 	free(*stash);
 	*stash = tmp;
 	return (0);
@@ -135,7 +117,7 @@ char	*get_next_line(int fd)
 		if ((strjoin(&stash, buf)) == 1)
 			return (NULL);
 	}
-	if (stash == NULL || stash[0] == '\0' || byte_num = -1)
+	if (stash == NULL || stash[0] == '\0' || byte_num == -1)
 	{
 		free(stash);
 		stash = (NULL);
